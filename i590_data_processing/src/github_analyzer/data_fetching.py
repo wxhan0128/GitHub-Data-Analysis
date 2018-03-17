@@ -1,6 +1,7 @@
 import requests
 import json
 from urllib.parse import urljoin
+import datetime
 import getpass
 import win_unicode_console
 
@@ -89,7 +90,7 @@ class DataFetching:
         response = requests.get(
             repos_url,
             headers=head,
-            params=params
+            params=params,
         )
         # res = requests.get('https://api.github.com/repositories', params=params)
         if response.ok:
@@ -133,6 +134,29 @@ class DataFetching:
             error = 'request error'
             return error
 
+    def search_star_repositories(self, token, year, month, day, star_number):
+        try:
+            date = datetime.date(year, month, day)
+        except:
+            error = 'date invalid'
+            return error
+        else:
+            search_repos_url = urljoin(self.GITHUB_API,
+                                       '/search/repositories?q=created:%s+stars:>%d' % (date, star_number))
+            head = {'Authorization': 'token %s' % token}
+            response = requests.get(
+                search_repos_url,
+                headers=head
+            )
+
+            if response.ok:
+                searched_data = json.loads(response.text or response.content)
+                return searched_data
+            else:
+                print(json.dumps(response.json()['message'], indent=4))
+                error = 'request error'
+                return error
+
 
 if __name__ == '__main__':
     username = input('GitHub username: ')
@@ -141,27 +165,26 @@ if __name__ == '__main__':
 
     # win_unicode_console.enable()
     df = DataFetching(username, password)
-    df.generate_authorization('your authorization name')  # define a arbitrary name for it to identify
-    df.get_authorization('one of your authorization ids')
+    df.generate_authorization('oauth test1')  # define a arbitrary name for it to identify
+    df.get_authorization('173486846')
     df.list_all_authorization()
-    token = 'your token'
+    token = '85015b14f0ff000b5ace4789c0de0e6a9f4c39b6'
 
-    since = 115891102
     # since = -1
-    for i in range(0, 1):
-        all_repos = df.get_all_repositories(token, since)
-        # repos_data = r.json()
-        if all_repos != 'request error':
-            for repos in all_repos:
-                detail = df.get_repository_details(token, repos['url'])
-                if detail != 'not found':
-                    print(json.dumps(detail, indent=4))
-                else:
-                    continue
-
-            since = all_repos[-1]['id']
-        else:
-            break
+    # for i in range(0, 50):
+    #     all_repos = df.get_all_repositories(token, since)
+    #     # repos_data = r.json()
+    #     if all_repos != 'request error':
+    #         for repos in all_repos:
+    #             detail = df.get_repository_details(token, repos['url'])
+    #             if detail != 'not found':
+    #                 print(json.dumps(detail, indent=4))
+    #             else:
+    #                 continue
+    #
+    #         since = all_repos[-1]['id']
+    #     else:
+    #         break
 
     # for i in range(0, 1):
     #     searched_data = df.search_latest_repositories(token, i)
@@ -171,3 +194,10 @@ if __name__ == '__main__':
     #
     #     else:
     #         break
+
+    for i in range(1, 32):
+        searched_data = df.search_star_repositories(token, 2018, 1, i, 40)
+        if searched_data != 'request error' and searched_data != 'date invalid':
+            print('day: %d, search number: %d' % (i, searched_data['total_count']))
+            # for repos in searched_data['items']:
+            #     print(json.dumps(repos, indent=4))
