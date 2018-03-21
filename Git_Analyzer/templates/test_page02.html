@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ t }}</title>
+</head>
+<body>
+<table>
+    <tr id="row">
+        <th class="id">Language</th>
+        <th class="total">Total Number</th>
+    </tr>
+    {% for i in alldata %}
+        <tr class="datas">
+            <td class="name">{{ i["_id"] }}</td>
+            <td class="tol">{{ i["total"] }}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ t }}</title>
+</head>
+<body>
+<table>
+    <tr id="row">
+        <th class="id">id</th>
+        <th class="name">name</th>
+        <th class="description">description</th>
+        <th class="date">Date</th>
+    </tr>
+    {% for i in alldata %}
+        <tr class="datas">
+            <td class="name">{{ i["_id"] }}</td>
+            <td class="desc">{{ i["name"] }}</td>
+            <td class="description">{{ i["description"] }}</td>
+            <td class="date">{{ i["created_at"] }}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
