@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from pymongo import MongoClient
 import pymongo
 from pymongo.errors import ConnectionFailure
+import json
 
 mongo_uri = 'mongodb://%s:%s@cluster0-shard-00-01-i6gcp.mongodb.net:27017/admin' % (
     'Campione', 'veTRxJL29lpKWwPn')
@@ -30,25 +31,52 @@ def hello_world():
     return 'Hello World!'
 
 
-@app.route('/listAll')
-def list_alldata():
-    repos_data = db.repos.find({})
-    return render_template('test_page01.html', alldata=repos_data, t=title, h=heading)
+@app.route('/gaz/api/v1.0/repositories', methods=['GET'])
+def get_repos():
+    try:
+        all_repos = db.repos.find({})
+        repos_list = []
 
-
-@app.route('/langs')
-def list_langdata():
-    langs_data = db.repos.aggregate([
-        {
-            "$group": {
-                "_id": "$language",
-                "total": {"$sum": 1}
+        for repos in all_repos:
+            repos_item = {
+                'id': repos['id'],
+                'name': repos['name'],
+                'description': repos['description'],
             }
-        }
-    ])
+            repos_list.append(repos_item)
+    except Exception as e:
+        return str(e)
 
-    return render_template('test_page02.html', alldata=langs_data, t=title, h=heading)
+    # return render_template('test_page01.html', alldata=repos_data, t=title, h=heading)
+    return jsonify(repos_list)
+
+
+@app.route('/gaz/api/v1.0/languages', methods=['GET'])
+def get_langs():
+    try:
+        all_langs = db.repos.aggregate([
+            {
+                "$group": {
+                    "_id": "$language",
+                    "total": {"$sum": 1}
+                }
+            }
+        ])
+        lang_list = []
+
+        for lang in all_langs:
+            lang_item = {
+                'language': lang['_id'],
+                'total': lang['total']
+            }
+            lang_list.append(lang_item)
+    except Exception as e:
+        return str(e)
+
+    return jsonify(lang_list)
+
+    # return render_template('test_page02.html', alldata=all_langs, t=title, h=heading)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
