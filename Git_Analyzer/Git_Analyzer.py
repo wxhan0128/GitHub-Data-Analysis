@@ -1,29 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-from pymongo import MongoClient
-import pymongo
-from pymongo.errors import ConnectionFailure
-import json
-
-mongo_uri = 'mongodb://%s:%s@cluster0-shard-00-01-i6gcp.mongodb.net:27017/admin' % (
-    'Campione', 'veTRxJL29lpKWwPn')
-client = MongoClient(mongo_uri,
-                     ssl=True,
-                     replicaSet='Cluster0-shard-0',
-                     authSource='admin')
-
-try:
-    info = client.server_info()  # Forces a call.
-    print(info)
-    print(client.database_names())
-except ConnectionFailure:
-    print('Failed to connect to server: %s' % mongo_uri)
-    exit()
-
-db = client.gitdbPro
+from config import config
 
 app = Flask(__name__)
-title = "GitHub Data with Flask"
-heading = "List all"
+app.config.from_object(config["development"])
+client = config["development"].client
+db = client.gitdbPro
 
 
 @app.route('/')
@@ -79,4 +60,4 @@ def get_langs():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
