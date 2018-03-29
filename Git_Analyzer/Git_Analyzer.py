@@ -4,7 +4,7 @@ from config import config
 app = Flask(__name__)
 app.config.from_object(config["development"])
 client = config["development"].client
-db = client.gitdbPro
+db = client.gitdbPro # test
 
 
 @app.route('/')
