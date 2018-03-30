@@ -1,7 +1,3 @@
-from pymongo import MongoClient
-from pymongo.errors import ConnectionFailure
-
-
 class Config(object):
 
     @staticmethod
@@ -20,20 +16,15 @@ class TestingConfig(Config):
 class DevelopmentConfig(Config):
     DEBUG = True
 
-    mongo_uri = 'mongodb://%s:%s@cluster0-shard-00-01-i6gcp.mongodb.net:27017/admin' % (
-        'Campione', 'veTRxJL29lpKWwPn')
-    client = MongoClient(mongo_uri,
-                         ssl=True,
-                         replicaSet='Cluster0-shard-0',
-                         authSource='admin')
-
-    try:
-        info = client.server_info()  # Forces a call.
-        print(info)
-        print(client.database_names())
-    except ConnectionFailure:
-        print('Failed to connect to server: %s' % mongo_uri)
-        exit()
+    # configure the MongoDB connections
+    MONGO_HOST = 'mongodb://cluster0-shard-00-00-i6gcp.mongodb.net/?ssl=true'
+    MONGO_USERNAME = 'Campione'
+    MONGO_PASSWORD = 'veTRxJL29lpKWwPn'
+    MONGO_PORT = 27017
+    MONGO_AUTH_SOURCE = 'admin'
+    MONGO_REPLICA_SET = 'Cluster0-shard-0'
+    MONGO_READ_PREFERENCE = 'PRIMARY'
+    MONGO_DBNAME = 'gitdbPro'
 
 
 config = {

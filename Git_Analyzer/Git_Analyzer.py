@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from config import config
+from flask_pymongo import PyMongo
 
 app = Flask(__name__)
 app.config.from_object(config["development"])
-client = config["development"].client
-db = client.gitdbPro # test
+mongo = PyMongo(app)
 
 
 @app.route('/')
@@ -15,7 +15,7 @@ def hello_world():
 @app.route('/gaz/api/v1.0/repositories', methods=['GET'])
 def get_repos():
     try:
-        all_repos = db.repos.find({})
+        all_repos = mongo.db.repos.find({})
         repos_list = []
 
         for repos in all_repos:
@@ -35,7 +35,7 @@ def get_repos():
 @app.route('/gaz/api/v1.0/languages', methods=['GET'])
 def get_langs():
     try:
-        all_langs = db.repos.aggregate([
+        all_langs = mongo.db.repos.aggregate([
             {
                 "$group": {
                     "_id": "$language",
