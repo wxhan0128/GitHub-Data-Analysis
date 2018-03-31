@@ -15,7 +15,8 @@ def hello_world():
 @app.route('/gaz/api/v1.0/repositories', methods=['GET'])
 def get_repos():
     try:
-        all_repos = mongo.db.repos.find({})
+        # filter the fields which we want to analyze
+        all_repos = mongo.db.repos.find({}, {"id": 1, "name": 1, "description": 1})
         repos_list = []
 
         for repos in all_repos:
@@ -28,7 +29,7 @@ def get_repos():
     except Exception as e:
         return str(e)
 
-    # return render_template('test_page01.html', alldata=repos_data, t=title, h=heading)
+    # return render_template('test_page01.html', alldata=all_repos, t=title, h=heading)
     return jsonify(repos_list)
 
 
@@ -41,6 +42,9 @@ def get_langs():
                     "_id": "$language",
                     "total": {"$sum": 1}
                 }
+            },
+            {
+                "$sort": {"total": -1}
             }
         ])
         lang_list = []
@@ -54,9 +58,8 @@ def get_langs():
     except Exception as e:
         return str(e)
 
-    return jsonify(lang_list)
-
     # return render_template('test_page02.html', alldata=all_langs, t=title, h=heading)
+    return jsonify(lang_list)
 
 
 if __name__ == '__main__':
