@@ -2,14 +2,19 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 from config import config
 from flask_pymongo import PyMongo
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="./templates/static/dist", template_folder="./templates/static")
 app.config.from_object(config["development"])
 mongo = PyMongo(app)
 
 
-@app.route('/')
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
+@app.route('/hello')
 def hello_world():
-    return 'Hello World!'
+    return "Hello World!"
 
 
 @app.route('/gaz/api/v1.0/repositories', methods=['GET'])
