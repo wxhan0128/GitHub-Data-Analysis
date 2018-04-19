@@ -1,18 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from config import config
 from flask_pymongo import PyMongo
+import requests
+import json
+from urllib.parse import urljoin
 
 app = Flask(__name__, static_folder="./templates/static/dist", template_folder="./templates/static")
 app.config.from_object(config["development"])
 mongo = PyMongo(app)
+GITHUB_API = 'https://api.github.com'
 
 
-@app.route("/")
+@app.route("/gaz")
 def index():
     return render_template("index.html")
 
 
-@app.route('/hello')
+@app.route('/gaz/hello')
 def hello_world():
     return "Hello World!"
 
@@ -65,6 +69,33 @@ def get_langs():
 
     # return render_template('test_page02.html', alldata=all_langs, t=title, h=heading)
     return jsonify(lang_list)
+
+
+@app.route('/gaz/api/v1.0/users', methods=['POST'])
+def create_user():
+    username = request.json['username']
+    password = request.json['password']
+
+    repos_data = get_userRepos(username, password)
+    for i in repos_data:
+        print(i)
+    return jsonify(repos_data)
+
+
+def get_userRepos(username, password):
+    url = urljoin(GITHUB_API, 'user/repos')
+    response = requests.get(
+        url,
+        auth=(username, password),
+        params={"affiliation": "owner"}
+    )
+
+    if response.ok:
+        repos_data = json.loads(response.text or response.content)
+
+        return repos_data
+    else:
+        print(json.dumps(response.json()['message'], indent=4))
 
 
 if __name__ == '__main__':

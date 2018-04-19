@@ -1,6 +1,21 @@
 import React from "react";
 import axios from 'axios';
-import {BarChart, Bar, Brush, ReferenceLine, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
+import {
+    BarChart,
+    Bar,
+    Brush,
+    ReferenceLine,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend
+} from 'recharts';
+import {
+    Col,
+    Grid,
+    Row
+} from 'react-bootstrap';
 
 
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -30,28 +45,36 @@ export default class LangsContainer extends React.Component {
     render() {
         return (
             <div>
-                <LangsList results={this.state.results}/>
+                <LangsPlots results={this.state.results}/>
             </div>
         );
     }
 }
 
-class LangsList extends React.Component {
+class LangsPlots extends React.Component {
     render() {
         const data = this.props.results;
 
         return (
-            <BarChart width={1500} height={600} data={data}
-                      margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-                <CartesianGrid strokeDasharray="3 3"/>
-                <XAxis dataKey="language"/>
-                <YAxis/>
-                <Tooltip/>
-                <Legend verticalAlign="top" wrapperStyle={{lineHeight: '40px'}}/>
-                <ReferenceLine y={0} stroke='#000'/>
-                <Brush dataKey='language' height={30} stroke="#8884d8"/>
-                <Bar dataKey="total" fill="#8884d8"/>
-            </BarChart>
+            <Grid>
+                <Row>
+                    <Col smOffset={1} sm={10}>
+                        <BarChart
+                            width={900} height={600}
+                            data={data}
+                        >
+                            <CartesianGrid strokeDasharray="3 3"/>
+                            <XAxis dataKey="language"/>
+                            <YAxis/>
+                            <Tooltip/>
+                            <Legend verticalAlign="top" wrapperStyle={{lineHeight: '40px'}}/>
+                            <ReferenceLine y={0} stroke='#000'/>
+                            <Brush dataKey='language' height={30} stroke="#8884d8"/>
+                            <Bar dataKey="total" fill="#8884d8"/>
+                        </BarChart>
+                    </Col>
+                </Row>
+            </Grid>
         );
     }
 }

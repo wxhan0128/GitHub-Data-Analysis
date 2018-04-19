@@ -15,10 +15,11 @@ const config = {
     module: {
         rules: [
             {
-                test: /\.jsx?$/,
+                test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: "babel-loader"
+                loader: "babel-loader",
+                query: {
+                    presets: ['es2015', 'react', 'stage-0']
                 }
             }
         ]
