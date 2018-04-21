@@ -55,7 +55,6 @@ class LoginContainer extends React.Component {
             console.log(error);
         });
 
-        // alert('A post was submitted: ' + this.state.message);
         event.preventDefault();
     }
 
@@ -68,7 +67,8 @@ class LoginContainer extends React.Component {
                     username={this.state.username}
                     password={this.state.password}
                     handleUsernameChange={this.handleUsernameChange}
-                    handlePasswordChange={this.handlePasswordChange}/>
+                    handlePasswordChange={this.handlePasswordChange}
+                />
             </div>
         );
     }

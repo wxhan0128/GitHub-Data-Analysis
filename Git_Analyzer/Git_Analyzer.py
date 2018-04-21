@@ -4,6 +4,7 @@ from flask_pymongo import PyMongo
 import requests
 import json
 from urllib.parse import urljoin
+from datetime import date
 
 app = Flask(__name__, static_folder="./templates/static/dist", template_folder="./templates/static")
 app.config.from_object(config["development"])
@@ -26,6 +27,7 @@ def get_repos():
     try:
         # filter the fields which we want to analyze
         all_repos = mongo.db.repos.find({}, {"id": 1, "name": 1, "description": 1})
+
         repos_list = []
 
         for repos in all_repos:
@@ -56,6 +58,7 @@ def get_langs():
                 "$sort": {"total": -1}
             }
         ])
+
         lang_list = []
 
         for lang in all_langs:
@@ -69,6 +72,44 @@ def get_langs():
 
     # return render_template('test_page02.html', alldata=all_langs, t=title, h=heading)
     return jsonify(lang_list)
+
+
+@app.route('/gaz/api/v1.0/language_trends', methods=['POST'])
+def get_lang_trend():
+    lang_name = request.json['lname']
+    print(lang_name)
+
+    lang_trend = mongo.db.repos.aggregate(
+        [
+            {"$match": {"language": lang_name}
+             },
+            {
+                "$group":
+                    {
+                        "_id": {
+                            "year": {"$substr": ["$created_at", 0, 4]},
+                            "month": {"$substr": ["$created_at", 5, 2]},
+                            "language": "$language",
+                        },
+                        "count": {"$sum": 1}
+                    },
+            },
+            {"$sort": {"_id.year": 1, "_id.month": 1}},
+            {"$project": {"_id": 0, "l": "$_id.language", "y": "$_id.year", "m": "$_id.month", "c": "$count"}}
+        ]
+    )
+
+    trend_list = []
+
+    for trend in lang_trend:
+        trend_item = {
+            'language': trend['l'],
+            'date': trend['y'] + "-" + trend['m'],
+            'total': trend['c']
+        }
+        trend_list.append(trend_item)
+
+    return jsonify(trend_list)
 
 
 @app.route('/gaz/api/v1.0/users', methods=['POST'])
