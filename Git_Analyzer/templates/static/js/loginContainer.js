@@ -20,6 +20,7 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 class LoginContainer extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             username: '',
             password: '',

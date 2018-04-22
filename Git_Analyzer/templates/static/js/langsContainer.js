@@ -30,6 +30,7 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 export default class LangsContainer extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             result1: [],
             result2: [],

@@ -24,6 +24,7 @@ import {
     Button
 } from 'react-bootstrap';
 import LangsContainer from './langsContainer.js';
+import ReposContainer from './reposContainer.js';
 import LoginContainer from './loginContainer.js';
 import ProfileContainer from './profileContainer.js';
 
@@ -34,6 +35,7 @@ class Home extends React.Component {
                 <Grid>
                     <Row className="show-grid">
                         <Col sm={6} md={8}>
+                            <ReposContainer/>
                             <LangsContainer/>
                         </Col>
                     </Row>
@@ -47,7 +49,7 @@ class About extends React.Component {
     render() {
         return (
             <div>
-                About!
+                Published by Han, Wu and Zhou!
             </div>
         );
     }

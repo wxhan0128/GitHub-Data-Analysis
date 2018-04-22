@@ -40,7 +40,27 @@ def get_repos():
     except Exception as e:
         return str(e)
 
-    # return render_template('test_page01.html', alldata=all_repos, t=title, h=heading)
+    return jsonify(repos_list)
+
+
+@app.route('/gaz/api/v1.0/top_repositories', methods=['GET'])
+def get_top_repos():
+    top_repos = mongo.db.repos.find({}, {"id": 1, "name": 1, "stargazers_count": 1}).sort(
+        [("stargazers_count", -1)]).limit(100)
+
+    print(top_repos)
+
+    repos_list = []
+
+    for repos in top_repos:
+        repos_item = {
+            'id': repos['id'],
+            'name': repos['name'],
+            'star_num': repos['stargazers_count']
+        }
+
+        repos_list.append(repos_item)
+
     return jsonify(repos_list)
 
 
@@ -70,7 +90,6 @@ def get_langs():
     except Exception as e:
         return str(e)
 
-    # return render_template('test_page02.html', alldata=all_langs, t=title, h=heading)
     return jsonify(lang_list)
 
 

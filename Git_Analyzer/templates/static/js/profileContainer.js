@@ -6,8 +6,16 @@ import {
     Col,
     Image,
     ListGroup,
-    ListGroupItem
+    ListGroupItem,
+    Panel
 } from 'react-bootstrap';
+import {
+    PieChart,
+    Pie,
+    Legend,
+    Tooltip
+} from 'recharts';
+import Enumerable from 'linq';
 
 class ProfileContainer extends React.Component {
     constructor(props, context) {
@@ -21,10 +29,17 @@ class ProfileContainer extends React.Component {
         return (
             <Grid>
                 <Row>
-                    <Col smOffset={2} xs={12} sm={2}>
-                        <Profile userData={this.userData}/>
+                    <Col xs={12} sm={4}>
+                        <Panel>
+                            <Panel.Body>
+                                <Profile userData={this.userData}/>
+                                <hr/>
+                                <ReposPlots content={this.content}/>
+                            </Panel.Body>
+                        </Panel>
+
                     </Col>
-                    <Col xs={12} sm={6}>
+                    <Col xs={12} sm={8}>
                         <ListGroup>
                             <ReposList content={this.content}/>
                         </ListGroup>
@@ -44,7 +59,6 @@ class Profile extends React.Component {
             </div>
         );
     }
-
 }
 
 class ReposList extends React.Component {
@@ -68,6 +82,25 @@ class ReposList extends React.Component {
                 {listItems}
             </div>
         )
+    }
+}
+
+class ReposPlots extends React.Component {
+    render() {
+        const dataArray = this.props.content;
+        const query = Enumerable.from(dataArray)
+            .groupBy("$.language", null, "{ name: $, value: $$.count() }")
+            .toArray();
+
+        return (
+            <div>
+                <h5>Language distribution</h5>
+                <PieChart width={330} height={400}>
+                    <Pie data={query} cx={160} cy={110} innerRadius={40} outerRadius={80} fill="#82ca9d" label/>
+                    <Tooltip/>
+                </PieChart>
+            </div>
+        );
     }
 }
 
