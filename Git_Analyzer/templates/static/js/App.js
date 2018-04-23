@@ -75,6 +75,7 @@ class Management extends React.Component {
     }
 }
 
+// define the public method which used to store the global variables
 export const fakeAuth = {
     isAuthenticated: false,
     username: null,
@@ -104,7 +105,7 @@ const AuthButton = withRouter(
                             pathname: `/gaz/user/${fakeAuth.username}`,
                             query: {
                                 detail: fakeAuth.userPackage
-                            },
+                            }, // router with data
                         }
                     )}>
                     {fakeAuth.username}

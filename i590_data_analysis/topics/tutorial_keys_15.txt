@@ -1,0 +1,15 @@
+0	0.33333	framework server high fast base perform simpl librari php web lightweight client written api applic manag implement golang protocol power 
+1	0.33333	languag develop program kubernet build run applic function docker net manag process python aw environ guid core compil configur deploy 
+2	0.33333	react compon nativ librari app javascript css render web style creat built redux simpl power modern ui wrapper function state 
+3	0.33333	implement network pytorch tensorflow model imag neural learn code deep detect paper generat train kera face visual youtub convolut object 
+4	0.33333	io swift object app xcode iphon api auto framework core maco mac 和 block appl 的 github playground qq layout 
+5	0.33333	tool test script data secur python access user window databas generat log automat set find make activ util web password 
+6	0.33333	librari view anim simpl imag android io custom easi effect support load video color ui layout control progress power show 
+7	0.33333	vue js node base api simpl web laravel webpack applic project angular templat plugin framework starter typescript router theme exampl 
+8	0.33333	learn list awesom machin resourc curat data algorithm deep collect tutori python code cours book project relat develop softwar comput 
+9	0.33333	extens plugin exploit spring creat browser chrome featur chart stack full boot concept sketch search develop dynam cve page vulner 
+10	0.33333	https github http websit repositori org demo document offici repo git ai version issu differ record public track www read 
+11	0.33333	platform android app client api linux cross googl librari window written maco devic sdk desktop applic termin simpl live work 
+12	0.33333	sourc open system time base engin real tool game manag cryptocurr ethereum project free platform blockchain autom smart event built 
+13	0.33333	android app design architectur sampl materi kotlin project librari end base java clean pattern rxjava music exampl implement io develop 
+14	0.33333	code tool file line command generat librari data python javascript type html visual convert text depend interfac write json editor 

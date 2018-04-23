@@ -21,7 +21,8 @@ import {
     FormGroup,
     Grid,
     Row,
-    Button
+    Button,
+    Panel
 } from 'react-bootstrap';
 
 
@@ -95,20 +96,25 @@ class LangsPlots extends React.Component {
             <Grid>
                 <Row>
                     <Col smOffset={1} sm={10}>
-                        <BarChart
-                            width={900} height={600}
-                            data={data}
-                            margin={{top: 5, right: 30, left: 20, bottom: 5}}
-                        >
-                            <CartesianGrid strokeDasharray="3 3"/>
-                            <XAxis dataKey="language"/>
-                            <YAxis/>
-                            <Tooltip/>
-                            <Legend verticalAlign="top" wrapperStyle={{lineHeight: '40px'}}/>
-                            <ReferenceLine y={0} stroke='#000'/>
-                            <Brush dataKey='language' height={30} stroke="#8884d8"/>
-                            <Bar dataKey="total" fill="#8884d8"/>
-                        </BarChart>
+                        <Panel>
+                            <Panel.Heading>Language sum used for all repositories</Panel.Heading>
+                            <Panel.Body>
+                                <BarChart
+                                    width={900} height={600}
+                                    data={data}
+                                    margin={{top: 5, right: 30, left: 20, bottom: 5}}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3"/>
+                                    <XAxis dataKey="language"/>
+                                    <YAxis/>
+                                    <Tooltip/>
+                                    <Legend verticalAlign="top" wrapperStyle={{lineHeight: '40px'}}/>
+                                    <ReferenceLine y={0} stroke='#000'/>
+                                    <Brush dataKey='language' height={30} stroke="#8884d8"/>
+                                    <Bar dataKey="total" fill="#8884d8"/>
+                                </BarChart>
+                            </Panel.Body>
+                        </Panel>
                     </Col>
                 </Row>
             </Grid>
@@ -124,40 +130,47 @@ class TrendPlots extends React.Component {
             <Grid>
                 <Row>
                     <Col smOffset={1} sm={10}>
-                        <Form inline onSubmit={this.props.handleLanguageSubmit}>
-                            <FormGroup controlId="formControlsSelect">
-                                <ControlLabel>Select</ControlLabel>{'  '}
-                                <FormControl componentClass="select" placeholder="select"
-                                             onChange={this.props.handleLanguageChange}>
-                                    <option value="JavaScript">JavaScript</option>
-                                    <option value="Python">Python</option>
-                                    <option value="Java">Java</option>
-                                    <option value="C">C</option>
-                                    <option value="C++">C++</option>
-                                    <option value="Swift">Swift</option>
-                                </FormControl>
-                            </FormGroup>{'  '}
-                            <FormGroup>
-                                <Button type="submit" bsStyle="primary">Confirm</Button>
-                            </FormGroup>
-                        </Form>
-                    </Col>
-                </Row>
 
-                <Row>
-                    <Col smOffset={1} sm={10}>
-                        <LineChart
-                            width={900} height={600}
-                            data={data}
-                            syncId="anyId"
-                            margin={{top: 10, right: 30, left: 0, bottom: 0}}>
-                            <CartesianGrid strokeDasharray="3 3"/>
-                            <XAxis dataKey="date"/>
-                            <YAxis/>
-                            <Tooltip/>
-                            <Line type='monotone' dataKey='total' stroke='#82ca9d' fill='#82ca9d'/>
-                            <Brush/>
-                        </LineChart>
+                        <Panel>
+                            <Panel.Heading>See the trend for some most popular languages</Panel.Heading>
+                            <Panel.Body>
+                                <Row>
+                                    <Form inline onSubmit={this.props.handleLanguageSubmit}>
+                                        <FormGroup controlId="formControlsSelect">
+                                            <ControlLabel>Select</ControlLabel>{'  '}
+                                            <FormControl componentClass="select" placeholder="select"
+                                                         onChange={this.props.handleLanguageChange}>
+                                                <option value="JavaScript">JavaScript</option>
+                                                <option value="Python">Python</option>
+                                                <option value="Java">Java</option>
+                                                <option value="C">C</option>
+                                                <option value="C++">C++</option>
+                                                <option value="Swift">Swift</option>
+                                            </FormControl>
+                                        </FormGroup>{'  '}
+                                        <FormGroup>
+                                            <Button type="submit" bsStyle="primary">Confirm</Button>
+                                        </FormGroup>
+                                    </Form>
+                                </Row>
+
+                                <Row>
+                                    <LineChart
+                                        width={900} height={600}
+                                        data={data}
+                                        margin={{top: 10, right: 30, left: 20, bottom: 5}}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3"/>
+                                        <XAxis dataKey="date"/>
+                                        <YAxis/>
+                                        <Tooltip/>
+                                        <Line type='monotone' dataKey='total' stroke='#2ca02c' fill='#2ca02c'
+                                              label={{position: 'top'}}/>
+                                        <Brush/>
+                                    </LineChart>
+                                </Row>
+                            </Panel.Body>
+                        </Panel>
                     </Col>
                 </Row>
             </Grid>

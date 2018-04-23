@@ -45,13 +45,15 @@ class LoginContainer extends React.Component {
             {username: this.state.username, password: this.state.password}).then(response => {
             console.log('login successfully');
 
+            // send data to public method
             fakeAuth.authenticate(() => {
                 this.setState({redirectToReferrer: true});
             });
 
+            // send the global data
             fakeAuth.setData(this.state.username, response.data);
 
-            this.props.history.push("/gaz");
+            this.props.history.push("/gaz"); // redirect to home page
         }).catch(error => {
             console.log(error);
         });
@@ -129,4 +131,5 @@ class LoginForm extends React.Component {
     }
 }
 
+// must use withRouter, otherwise it will unable to find history variable
 export default withRouter(LoginContainer);

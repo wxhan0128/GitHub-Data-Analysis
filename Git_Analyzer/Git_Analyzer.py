@@ -43,12 +43,41 @@ def get_repos():
     return jsonify(repos_list)
 
 
+@app.route('/gaz/api/v1.0/repository_trends', methods=['GET'])
+def get_repos_trend():
+    repos_trend = mongo.db.repos.aggregate(
+        [
+            {
+                "$group":
+                    {
+                        "_id": {
+                            "year": {"$substr": ["$created_at", 0, 4]},
+                            "month": {"$substr": ["$created_at", 5, 2]},
+                        },
+                        "count": {"$sum": 1}
+                    },
+            },
+            {"$sort": {"_id.year": 1, "_id.month": 1}},
+            {"$project": {"_id": 0, "y": "$_id.year", "m": "$_id.month", "c": "$count"}}
+        ]
+    )
+
+    trend_list = []
+
+    for trend in repos_trend:
+        trend_item = {
+            'date': trend['y'] + "-" + trend['m'],
+            'total': trend['c']
+        }
+        trend_list.append(trend_item)
+
+    return jsonify(trend_list)
+
+
 @app.route('/gaz/api/v1.0/top_repositories', methods=['GET'])
 def get_top_repos():
     top_repos = mongo.db.repos.find({}, {"id": 1, "name": 1, "stargazers_count": 1}).sort(
         [("stargazers_count", -1)]).limit(100)
-
-    print(top_repos)
 
     repos_list = []
 

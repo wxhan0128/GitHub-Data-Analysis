@@ -88,6 +88,8 @@ class ReposList extends React.Component {
 class ReposPlots extends React.Component {
     render() {
         const dataArray = this.props.content;
+        // use linq.js to do advance process on json data, e.g. group by, count or sum
+        // the pie chart component only identify name-value pair
         const query = Enumerable.from(dataArray)
             .groupBy("$.language", null, "{ name: $, value: $$.count() }")
             .toArray();
@@ -96,7 +98,7 @@ class ReposPlots extends React.Component {
             <div>
                 <h5>Language distribution</h5>
                 <PieChart width={330} height={400}>
-                    <Pie data={query} cx={160} cy={110} innerRadius={40} outerRadius={80} fill="#82ca9d" label/>
+                    <Pie data={query} cx="50%" cy="30%" innerRadius={40} outerRadius={80} fill="#82ca9d" label/>
                     <Tooltip/>
                 </PieChart>
             </div>
@@ -104,4 +106,5 @@ class ReposPlots extends React.Component {
     }
 }
 
+// must use withRouter, otherwise it will unable to find props.location variable
 export default withRouter(ProfileContainer);
