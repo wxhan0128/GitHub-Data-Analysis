@@ -1,0 +1,10 @@
+0	0.5	react js compon vue app nativ node web simpl ui applic built build render creat webpack angular exampl modul mobil 
+1	0.5	web api framework develop time applic build kubernet extens manag php browser simpl docker real base spring servic system end 
+2	0.5	python code data languag program librari generat file javascript html packag rust function api type written convert compil interfac write 
+3	0.5	learn implement network deep pytorch tensorflow model machin imag neural algorithm paper detect python tutori train text code object generat 
+4	0.5	io swift app object written maco auto demo xcode day camera framework appl 基于 control api wechat bit arkit good 
+5	0.5	server https client platform http github googl net linux base window support cross devic request org protocol featur core desktop 
+6	0.5	librari android simpl anim view imag custom support easi io effect load style page show layout creat ui power chart 
+7	0.5	librari framework fast high base perform system javascript manag make power easi data java lightweight state android applic tini kotlin 
+8	0.5	tool list command awesom resourc line script curat collect file secur generat test user log termin inform softwar find monitor 
+9	0.5	sourc project open android design code game materi plugin architectur sampl theme app free exampl develop solut base uniti creat 

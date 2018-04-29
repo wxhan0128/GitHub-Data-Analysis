@@ -1,6 +1,29 @@
 import React from "react";
 import axios from 'axios';
-import {BarChart, Bar, Brush, ReferenceLine, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
+import {
+    Bar,
+    BarChart,
+    Brush,
+    CartesianGrid,
+    Legend,
+    Line,
+    LineChart,
+    ReferenceLine,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from 'recharts';
+import {
+    Col,
+    ControlLabel,
+    Form,
+    FormControl,
+    FormGroup,
+    Grid,
+    Row,
+    Button,
+    Panel
+} from 'react-bootstrap';
 
 
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -8,10 +31,15 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 export default class LangsContainer extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            results: [],
-            message: '',
+            result1: [],
+            result2: [],
+            lname: '',
         };
+
+        this.handleLanguageSubmit = this.handleLanguageSubmit.bind(this);
+        this.handleLanguageChange = this.handleLanguageChange.bind(this);
     }
 
     componentDidMount() {
@@ -19,39 +47,133 @@ export default class LangsContainer extends React.Component {
         axios.get('/gaz/api/v1.0/languages').then(response => {
             console.log(response.data);
             self.setState({
-                results: response.data,
-                message: 'load all language data!',
+                result1: response.data,
             });
         }).catch(error => {
             console.log(error);
         });
     }
 
+    handleLanguageChange(event) {
+        this.setState({lname: event.target.value});
+    }
+
+    handleLanguageSubmit(event) {
+        let self = this;
+        axios.post('/gaz/api/v1.0/language_trends',
+            {lname: this.state.lname}).then(response => {
+            console.log('submit successfully');
+
+            self.setState({
+                result2: response.data
+            });
+        }).catch(error => {
+            console.log(error);
+        });
+
+        event.preventDefault();
+    }
+
     render() {
         return (
             <div>
-                <LangsList results={this.state.results}/>
+                <LangsPlots result1={this.state.result1}/>
+                <TrendPlots
+                    result2={this.state.result2}
+                    handleLanguageSubmit={this.handleLanguageSubmit}
+                    handleLanguageChange={this.handleLanguageChange}
+                />
             </div>
         );
     }
 }
 
-class LangsList extends React.Component {
+class LangsPlots extends React.Component {
     render() {
-        const data = this.props.results;
+        const data = this.props.result1;
 
         return (
-            <BarChart width={1500} height={600} data={data}
-                      margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-                <CartesianGrid strokeDasharray="3 3"/>
-                <XAxis dataKey="language"/>
-                <YAxis/>
-                <Tooltip/>
-                <Legend verticalAlign="top" wrapperStyle={{lineHeight: '40px'}}/>
-                <ReferenceLine y={0} stroke='#000'/>
-                <Brush dataKey='language' height={30} stroke="#8884d8"/>
-                <Bar dataKey="total" fill="#8884d8"/>
-            </BarChart>
+            <Grid>
+                <Row>
+                    <Col smOffset={1} sm={10}>
+                        <Panel>
+                            <Panel.Heading>Language sum used for all repositories</Panel.Heading>
+                            <Panel.Body>
+                                <BarChart
+                                    width={900} height={600}
+                                    data={data}
+                                    margin={{top: 5, right: 30, left: 20, bottom: 5}}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3"/>
+                                    <XAxis dataKey="language"/>
+                                    <YAxis/>
+                                    <Tooltip/>
+                                    <Legend verticalAlign="top" wrapperStyle={{lineHeight: '40px'}}/>
+                                    <ReferenceLine y={0} stroke='#000'/>
+                                    <Brush dataKey='language' height={30} stroke="#8884d8"/>
+                                    <Bar dataKey="total" fill="#8884d8"/>
+                                </BarChart>
+                            </Panel.Body>
+                        </Panel>
+                    </Col>
+                </Row>
+            </Grid>
+        );
+    }
+}
+
+class TrendPlots extends React.Component {
+    render() {
+        const data = this.props.result2;
+
+        return (
+            <Grid>
+                <Row>
+                    <Col smOffset={1} sm={10}>
+
+                        <Panel>
+                            <Panel.Heading>See the trend for some most popular languages</Panel.Heading>
+                            <Panel.Body>
+                                <Row>
+                                    <Form inline onSubmit={this.props.handleLanguageSubmit}>
+                                        <FormGroup controlId="formControlsSelect">
+                                            <ControlLabel>Select</ControlLabel>{'  '}
+                                            <FormControl componentClass="select" placeholder="select"
+                                                         onChange={this.props.handleLanguageChange}>
+                                                <option value="JavaScript">JavaScript</option>
+                                                <option value="Python">Python</option>
+                                                <option value="Java">Java</option>
+                                                <option value="C">C</option>
+                                                <option value="C++">C++</option>
+                                                <option value="Swift">Swift</option>
+                                            </FormControl>
+                                        </FormGroup>{'  '}
+                                        <FormGroup>
+                                            <Button type="submit" bsStyle="primary">Confirm</Button>
+                                        </FormGroup>
+                                    </Form>
+                                </Row>
+
+                                <Row>
+                                    <LineChart
+                                        width={900} height={600}
+                                        data={data}
+                                        margin={{top: 10, right: 30, left: 20, bottom: 5}}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3"/>
+                                        <XAxis dataKey="date"/>
+                                        <YAxis/>
+                                        <Tooltip/>
+                                        <Line type='monotone' dataKey='total' stroke='#2ca02c' fill='#2ca02c'
+                                              label={{position: 'top'}}/>
+                                        <Brush/>
+                                    </LineChart>
+                                </Row>
+                            </Panel.Body>
+                        </Panel>
+                    </Col>
+                </Row>
+            </Grid>
         );
     }
 }
